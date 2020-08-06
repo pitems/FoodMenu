@@ -27,35 +27,41 @@ class MainActivity : AppCompatActivity() {
         listOfFoods.add(Food("Sugar Cube","Delicious Sugary Cube",R.drawable.ic_sugar))
         adapter= FoodAdapter(this,listOfFoods)
 
+
+        //this is our gridview and we are giving it our adapter with all the objects created below
         gvListFood.adapter=adapter
     }
-    class FoodAdapter:BaseAdapter{
-        var listOfFood=ArrayList<Food>()
-        var context:Context?=null
-        constructor(context: Context,listOfFood:ArrayList<Food>):super(){
-            this.context=context
-            this.listOfFood=listOfFood
-        }
-        override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-            val food = this. listOfFood[p0]
-            var inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            var foodView = inflator.inflate(R.layout.food_ticket,null)
-            foodView.ivFoodImage.setImageResource(food.image!!)
-            foodView.ivFoodImage.setOnClickListener{
 
-                val intent= Intent(context, FoodDetails::class.java)
-                intent.putExtra("name",food.name)
+    //So what is all this nonsense you might ask well i will try to explain this to me in case i forgot
+    class FoodAdapter:BaseAdapter{
+        var listOfFood=ArrayList<Food>()//This class has a list the same type as above but empty
+        var context:Context?=null//the application context waiting for the context tha will be given below
+        constructor(context: Context,listOfFood:ArrayList<Food>):super(){
+            this.context=context//it will receive a context
+            this.listOfFood=listOfFood //it will receive an object of type listOfFood
+        }
+        //Because is an Adapter this override function will help us inflate our food_ticket activity on the
+        //grid view on the main activity
+        override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
+            val food = this. listOfFood[p0] //is a variable of type Food the p0 it's because it iterates the listOfFood
+            var inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater // the inflator variable
+            var foodView = inflator.inflate(R.layout.food_ticket,null) //Setting up what will be inflated
+            foodView.ivFoodImage.setImageResource(food.image!!) //Setting the image on the inflated layout
+            foodView.ivFoodImage.setOnClickListener{ //Making the layout inflated clickable
+
+                val intent= Intent(context, FoodDetails::class.java) //the intent to call 2nd activity
+                intent.putExtra("name",food.name) //adding extra data to the 2nd activity
                 intent.putExtra("des",food.des)
                 intent.putExtra("image",food.image!!)
-                context!!.startActivity(intent)
+                context!!.startActivity(intent) //calling the second activity
 
             }
-            foodView.tvName.text=food.name!!
-            return foodView
+            foodView.tvName.text=food.name!! // setting up the name on the layout activity
+            return foodView //returns the created object to the gridview
         }
 
         override fun getItem(p0: Int): Any {
-            return listOfFood[p0]
+            return listOfFood[p0] //just get the item on this position
         }
 
         override fun getItemId(p0: Int): Long {
@@ -63,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-          return listOfFood.size
+          return listOfFood.size //get the amount of objects on the list
         }
     }
 
